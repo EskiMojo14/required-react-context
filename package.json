@@ -1,5 +1,6 @@
 {
   "name": "required-react-context",
+  "description": "A simple React Context wrapper that throws an error if it is used without being provided",
   "packageManager": "yarn@4.1.1",
   "version": "1.0.0",
   "type": "module",
@@ -37,6 +38,9 @@
     "type": "tsc",
     "prepack": "yarn run publint"
   },
+  "repository": "https://github.com/EskiMojo14/required-react-context.git",
+  "author": "EskiMojo14 <ben.j.durrant@gmail.com>",
+  "license": "MIT",
   "prettier": {},
   "lint-staged": {
     "*.{ts,md}": "prettier --write"
