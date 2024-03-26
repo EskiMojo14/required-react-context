@@ -16,6 +16,13 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "react",
+    "context",
+    "required",
+    "createcontext",
+    "usecontext"
+  ],
   "scripts": {
     "prepare": "husky install",
     "prebuild": "yarn run type",
