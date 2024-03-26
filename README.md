@@ -1,6 +1,6 @@
 # required-react-context
 
-A wrapper around React Context to require a value set with a Provider, throwing an error if used outside one.
+A wrapper around React Context to require a value set with a Provider, throwing an error if used outside one. This avoids the often undesirable behavior of silently falling back to a default value.
 
 ```ts
 import { createRequiredContext } from "required-react-context";
