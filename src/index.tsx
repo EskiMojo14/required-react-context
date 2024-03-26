@@ -5,25 +5,30 @@ import { capitalise } from "./util";
 
 const UNSET_VALUE = Symbol.for("required-react-context/unset-value");
 
-interface Names {
+export interface Names {
   name: string;
   contextName?: string;
   providerName?: string;
+  providerProp?: string;
   consumerName?: string;
   hookName?: string;
 }
 
 type GetContextName<N extends Names> = N["contextName"] extends string
   ? N["contextName"]
-  : `${N["name"]}Context`;
+  : `${Capitalize<N["name"]>}Context`;
 
 type GetProviderName<N extends Names> = N["providerName"] extends string
   ? N["providerName"]
-  : `${N["name"]}Provider`;
+  : `${Capitalize<N["name"]>}Provider`;
+
+type GetProviderProp<N extends Names> = N["providerProp"] extends string
+  ? N["providerProp"]
+  : N["name"];
 
 type GetConsumerName<N extends Names> = N["consumerName"] extends string
   ? N["consumerName"]
-  : `${N["name"]}Consumer`;
+  : `${Capitalize<N["name"]>}Consumer`;
 
 type GetHookName<N extends Names> = N["hookName"] extends string
   ? N["hookName"]
@@ -31,7 +36,10 @@ type GetHookName<N extends Names> = N["hookName"] extends string
 
 type NamedRequiredContext<T, N extends Names> = Compute<
   Record<GetContextName<N>, Context<T | typeof UNSET_VALUE>> &
-    Record<GetProviderName<N>, FC<PropsWithChildren<{ value: T }>>> &
+    Record<
+      GetProviderName<N>,
+      FC<PropsWithChildren<Record<GetProviderProp<N>, T>>>
+    > &
     Record<
       GetConsumerName<N>,
       FC<{ children: (value: T) => React.ReactNode }>
@@ -47,17 +55,19 @@ export function createRequiredContext<T>() {
   return {
     with: <const N extends Names>({
       name,
-      contextName = `${name}Context`,
-      providerName = `${name}Provider`,
-      consumerName = `${name}Consumer`,
+      contextName = `${capitalise(name)}Context`,
+      providerName = `${capitalise(name)}Provider`,
+      consumerName = `${capitalise(name)}Consumer`,
       hookName = `use${capitalise(name)}`,
+      providerProp = name,
     }: N): NamedRequiredContext<T, N> => {
       Context.displayName = contextName;
       return {
         [contextName]: Context,
-        [providerName](props: PropsWithChildren<{ value: T }>) {
+        [providerName](props: PropsWithChildren<Record<string, T>>) {
           return (
-            <Context.Provider value={props.value}>
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            <Context.Provider value={props[providerProp]!}>
               {props.children}
             </Context.Provider>
           );

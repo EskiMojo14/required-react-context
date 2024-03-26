@@ -3,6 +3,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import type { Context } from "react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
+import { capitalise } from "./util";
 import { createRequiredContext } from ".";
 
 describe("createRequiredContext", () => {
@@ -14,7 +15,7 @@ describe("createRequiredContext", () => {
     });
   it("creates a context and related utils", () => {
     const { TestContext, TestProvider, TestConsumer, useTest } =
-      createRequiredContext<number>().with({ name: "Test" });
+      createRequiredContext<number>().with({ name: "test" });
 
     expect(TestContext).toEqual(aContextWithDisplayName("TestContext"));
 
@@ -33,9 +34,10 @@ describe("createRequiredContext", () => {
   it("allows customising names", () => {
     const { CoolContext, CoolProvider, CoolConsumer, useCool } =
       createRequiredContext<number>().with({
-        name: "Test",
+        name: "test",
         contextName: "CoolContext",
         providerName: "CoolProvider",
+        providerProp: "coolValue",
         consumerName: "CoolConsumer",
         hookName: "useCool",
       });
@@ -53,11 +55,22 @@ describe("createRequiredContext", () => {
     expect(useCool).toBeTypeOf("function");
 
     expect(useCool.name).toBe("useCool");
+
+    const consume = vi.fn();
+    expect(() =>
+      render(
+        <CoolProvider coolValue={1}>
+          <CoolConsumer>{consume}</CoolConsumer>
+        </CoolProvider>,
+      ),
+    ).not.toThrow();
+
+    expect(consume).toHaveBeenCalledWith(1);
   });
   it("throws an error from a consumer if provider is not used", () => {
     const { TestConsumer, TestProvider } = createRequiredContext<number>().with(
       {
-        name: "Test",
+        name: "test",
       },
     );
 
@@ -74,7 +87,7 @@ describe("createRequiredContext", () => {
 
     expect(() =>
       render(
-        <TestProvider value={1}>
+        <TestProvider test={1}>
           <TestConsumer>{consume}</TestConsumer>
         </TestProvider>,
       ),
@@ -87,7 +100,8 @@ describe("createRequiredContext", () => {
   it("throws an error from a hook if provider is not used", () => {
     const { useContext, ContextProvider } =
       createRequiredContext<number>().with({
-        name: "Context",
+        name: "context",
+        providerProp: "value",
       });
 
     const consume = vi.fn();
@@ -108,5 +122,38 @@ describe("createRequiredContext", () => {
     ).not.toThrow();
 
     expect(consume).toHaveBeenCalledWith(1);
+  });
+  it("can be wrapped to customise name scheme", () => {
+    const typedCapitalise = capitalise as <T extends string>(
+      str: T,
+    ) => Capitalize<T>;
+    const createAContext = <T,>() => ({
+      withName: <Name extends string>(name: Name) =>
+        createRequiredContext<T>().with({
+          name,
+          providerProp: `a${typedCapitalise(name)}` as const,
+          contextName: `A${typedCapitalise(name)}Context` as const,
+          providerName: `A${typedCapitalise(name)}Provider` as const,
+          consumerName: `A${typedCapitalise(name)}Consumer` as const,
+          hookName: `useA${typedCapitalise(name)}` as const,
+        }),
+    });
+
+    const { ATestContext, ATestProvider, ATestConsumer, useATest } =
+      createAContext<number>().withName("test");
+
+    expect(ATestContext).toEqual(aContextWithDisplayName("ATestContext"));
+
+    expect(ATestProvider).toBeTypeOf("function");
+
+    expect(ATestProvider.name).toBe("ATestProvider");
+
+    expect(ATestConsumer).toBeTypeOf("function");
+
+    expect(ATestConsumer.name).toBe("ATestConsumer");
+
+    expect(useATest).toBeTypeOf("function");
+
+    expect(useATest.name).toBe("useATest");
   });
 });

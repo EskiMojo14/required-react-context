@@ -6,7 +6,7 @@ A wrapper around React Context to require a value set with a Provider, throwing 
 import { createRequiredContext } from "required-react-context";
 
 export const { CountContext, useCount, CountProvider, CountConsumer } =
-  createRequiredContext<number>().with({ name: "Count" });
+  createRequiredContext<number>().with({ name: "count" });
 
 function Child() {
   // This will throw an error if used outside a CountProvider
@@ -16,7 +16,7 @@ function Child() {
 
 function App() {
   return (
-    <CountProvider value={5}>
+    <CountProvider count={5}>
       <Child />
     </CountProvider>
   );
@@ -32,12 +32,28 @@ import { createRequiredContext } from "required-react-context";
 
 export const { ACountContext, useACount, ACountProvider, ACountConsumer } =
   createRequiredContext<number>().with({
-    name: "Count",
+    name: "count",
+    // everything below is optional
+    providerProp: "aCount",
     contextName: "ACountContext",
     hookName: "useACount",
     providerName: "ACountProvider",
     consumerName: "ACountConsumer",
   });
+
+function Child() {
+  // This will throw an error if used outside ACountProvider
+  const count = useACount();
+  return <div>{count}</div>;
+}
+
+function App() {
+  return (
+    <ACountProvider aCount={5}>
+      <Child />
+    </ACountProvider>
+  );
+}
 ```
 
 ## Typescript
