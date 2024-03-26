@@ -1,0 +1,65 @@
+{
+  "name": "required-react-context",
+  "packageManager": "yarn@4.1.1",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "prebuild": "yarn run type",
+    "build": "tsup",
+    "test": "vitest",
+    "lint": "eslint",
+    "format": "prettier",
+    "pre-commit": "lint-staged",
+    "attw": "attw",
+    "publint": "publint",
+    "type": "tsc",
+    "prepack": "yarn run publint"
+  },
+  "prettier": {},
+  "lint-staged": {
+    "*.{ts,md}": "prettier --write"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "sourcemap": true,
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true,
+    "minify": true
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.2",
+    "@types/eslint": "^8",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-vitest": "^0.4.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "publint": "^0.2.7",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
+  }
+}
