@@ -4,6 +4,8 @@ import type { Names, NamedRequiredContext } from "./types";
 import { UNSET_VALUE } from "./types";
 import { capitalise } from "./util";
 
+export { UNSET_VALUE };
+
 const notSet = (caller: string, providerName: string) =>
   `${caller}: context value is not set. Use ${providerName} to set the value.`;
 
