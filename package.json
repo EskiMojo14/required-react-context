@@ -43,11 +43,11 @@
       "esm",
       "cjs"
     ],
-    "external": [
-      "react"
-    ],
     "dts": true,
     "minify": true
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.2",
