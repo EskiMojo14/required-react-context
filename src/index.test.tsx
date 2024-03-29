@@ -183,4 +183,16 @@ describe("createRequiredContext", () => {
       `[Error: createRequiredContext: hookName must start with "use". Received: getTest]`,
     );
   });
+  it("can be used as a factory", () => {
+    const createNumberContext = createRequiredContext<number>();
+    const { CountContext } = createNumberContext.with({ name: "count" });
+    expect(CountContext).toEqual(aContextWithDisplayName("CountContext"));
+
+    const { ACountContext } = createNumberContext.with({ name: "aCount" });
+    expect(ACountContext).toEqual(aContextWithDisplayName("ACountContext"));
+
+    // check that the context is not shared between the two
+    expect(CountContext).toEqual(aContextWithDisplayName("CountContext"));
+    expect(ACountContext).not.toBe(CountContext);
+  });
 });

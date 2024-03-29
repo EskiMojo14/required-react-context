@@ -10,7 +10,6 @@ const notSet = (caller: string, providerName: string) =>
   `${caller}: context value is not set. Use ${providerName} to set the value.`;
 
 export function createRequiredContext<T>() {
-  const Context = createContext<T | typeof UNSET_VALUE>(UNSET_VALUE);
   return {
     with: <const N extends Names>({
       name,
@@ -25,6 +24,7 @@ export function createRequiredContext<T>() {
           `createRequiredContext: hookName must start with "use". Received: ${hookName}`,
         );
       }
+      const Context = createContext<T | typeof UNSET_VALUE>(UNSET_VALUE);
       Context.displayName = contextName;
       return {
         [contextName]: Context,
