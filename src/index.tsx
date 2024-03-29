@@ -20,6 +20,11 @@ export function createRequiredContext<T>() {
       hookName = `use${capitalise(name)}`,
       providerProp = name,
     }: N): NamedRequiredContext<T, N> => {
+      if (!hookName.startsWith("use")) {
+        throw new Error(
+          `createRequiredContext: hookName must start with "use". Received: ${hookName}`,
+        );
+      }
       Context.displayName = contextName;
       return {
         [contextName]: Context,

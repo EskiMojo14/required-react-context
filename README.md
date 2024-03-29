@@ -56,6 +56,8 @@ function App() {
 }
 ```
 
+Note that `hookName` is required to start with `"use"`, to match the React hook naming convention.
+
 ## Typescript
 
 This package uses [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) from Typescript 5.0, so will not work properly with 4.9 or lower.

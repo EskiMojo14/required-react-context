@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
-import { render, renderHook, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import type { Context } from "react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -105,23 +105,29 @@ describe("createRequiredContext", () => {
       });
 
     const consume = vi.fn();
-    expect(() =>
-      renderHook(() => consume(useContext())),
-    ).toThrowErrorMatchingInlineSnapshot(
+
+    function TestComponent() {
+      const value = useContext();
+      consume(value);
+      return <div>{value}</div>;
+    }
+    expect(() => render(<TestComponent />)).toThrowErrorMatchingInlineSnapshot(
       `[Error: useContext: context value is not set. Use ContextProvider to set the value.]`,
     );
 
     expect(consume).not.toHaveBeenCalled();
 
     expect(() =>
-      renderHook(() => consume(useContext()), {
-        wrapper: ({ children }) => (
-          <ContextProvider value={1}>{children}</ContextProvider>
-        ),
-      }),
+      render(
+        <ContextProvider value={1}>
+          <TestComponent />
+        </ContextProvider>,
+      ),
     ).not.toThrow();
 
     expect(consume).toHaveBeenCalledWith(1);
+
+    expect(screen.getByText("1")).toBeInTheDocument();
   });
   it("can be wrapped to customise name scheme", () => {
     const typedCapitalise = capitalise as <T extends string>(
@@ -155,5 +161,16 @@ describe("createRequiredContext", () => {
     expect(useATest).toBeTypeOf("function");
 
     expect(useATest.name).toBe("useATest");
+  });
+  it("errors if hookName starts with something other than use", () => {
+    expect(() =>
+      createRequiredContext<number>().with({
+        name: "test",
+        // @ts-expect-error Testing invalid input
+        hookName: "getTest",
+      }),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: createRequiredContext: hookName must start with "use". Received: getTest]`,
+    );
   });
 });

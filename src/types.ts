@@ -9,7 +9,7 @@ export interface Names {
   providerName?: string;
   providerProp?: string;
   consumerName?: string;
-  hookName?: string;
+  hookName?: `use${string}`;
 }
 
 type GetContextName<N extends Names> = N["contextName"] extends string
