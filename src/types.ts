@@ -1,4 +1,4 @@
-import type { PropsWithChildren, Context, FC } from "react";
+import type { PropsWithChildren, Context, FC, ConsumerProps } from "react";
 import type { Compute } from "./util";
 
 export const UNSET_VALUE = Symbol.for("required-react-context/unset-value");
@@ -38,9 +38,6 @@ export type NamedRequiredContext<T, N extends Names> = Compute<
       GetProviderName<N>,
       FC<PropsWithChildren<Record<GetProviderProp<N>, T>>>
     > &
-    Record<
-      GetConsumerName<N>,
-      FC<{ children: (value: T) => React.ReactNode }>
-    > &
+    Record<GetConsumerName<N>, FC<ConsumerProps<T>>> &
     Record<GetHookName<N>, () => T>
 >;

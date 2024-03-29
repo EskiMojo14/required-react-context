@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ConsumerProps } from "react";
 import React, { createContext, useContext, useDebugValue } from "react";
 import type { Names, NamedRequiredContext } from "./types";
 import { UNSET_VALUE } from "./types";
@@ -36,7 +36,7 @@ export function createRequiredContext<T>() {
             </Context.Provider>
           );
         },
-        [consumerName](props: { children: (value: T) => React.ReactNode }) {
+        [consumerName](props: ConsumerProps<T>) {
           return (
             <Context.Consumer>
               {(value) => {
