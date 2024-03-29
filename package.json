@@ -2,7 +2,7 @@
   "name": "required-react-context",
   "description": "A simple React Context wrapper that throws an error if it is used without being provided",
   "packageManager": "yarn@4.1.1",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
