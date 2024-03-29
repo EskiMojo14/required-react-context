@@ -30,6 +30,16 @@ describe("createRequiredContext", () => {
     expect(useTest).toBeTypeOf("function");
 
     expect(useTest.name).toBe("useTest");
+
+    const consume = vi.fn();
+
+    expect(() =>
+      render(
+        <TestProvider test={1}>
+          <TestConsumer>{consume}</TestConsumer>
+        </TestProvider>,
+      ),
+    ).not.toThrow();
   });
   it("allows customising names", () => {
     const { CoolContext, CoolProvider, CoolConsumer, useCool } =
