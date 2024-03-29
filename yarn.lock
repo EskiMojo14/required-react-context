@@ -4609,6 +4609,8 @@ __metadata:
     tsup: "npm:^8.0.2"
     typescript: "npm:^5.4.3"
     vitest: "npm:^1.4.0"
+  peerDependencies:
+    react: ">=16.8.0"
   languageName: unknown
   linkType: soft
 

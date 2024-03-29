@@ -60,6 +60,24 @@ function App() {
 
 This package uses [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) from Typescript 5.0, so will not work properly with 4.9 or lower.
 
+### Declaration files
+
+Because the context uses a unique Symbol when unset, Typescript will struggle to create declaration files for the context. To work around this, you can either export only the hooks/consumer and provider, or import the `UNSET_VALUE` constant allowing Typescript to use it. Theoretically, you shouldn't need direct access to the context instance anyway, as the hooks and provider should be sufficient.
+
+```ts
+import { createRequiredContext } from "required-react-context";
+// no context instance exported
+export const { useCount, CountProvider, CountConsumer } =
+  createRequiredContext<number>().with({ name: "count" });
+
+// or
+
+import { createRequiredContext, UNSET_VALUE } from "required-react-context";
+// now able to export the context instance
+export const { CountContext, useCount, CountProvider, CountConsumer } =
+  createRequiredContext<number>().with({ name: "count" });
+```
+
 ## Prior art
 
 The idea of having a context that requires a value to be set is not unique by any means, but this library specifically takes a couple of cues from [@vtaits/react-required-context](https://www.npmjs.com/package/@vtaits/react-required-context), which provides a simpler (though less flexible) API.
