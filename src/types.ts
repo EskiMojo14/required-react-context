@@ -12,25 +12,37 @@ export interface Names {
   hookName?: `use${string}`;
 }
 
-type GetContextName<N extends Names> = N["contextName"] extends string
-  ? N["contextName"]
-  : `${Capitalize<N["name"]>}Context`;
+type GetName<
+  N extends Names,
+  K extends keyof Names,
+  Fallback extends string,
+> = N[K] extends string ? N[K] : Fallback;
 
-type GetProviderName<N extends Names> = N["providerName"] extends string
-  ? N["providerName"]
-  : `${Capitalize<N["name"]>}Provider`;
+type GetContextName<N extends Names> = GetName<
+  N,
+  "contextName",
+  `${Capitalize<N["name"]>}Context`
+>;
 
-type GetProviderProp<N extends Names> = N["providerProp"] extends string
-  ? N["providerProp"]
-  : N["name"];
+type GetProviderName<N extends Names> = GetName<
+  N,
+  "providerName",
+  `${Capitalize<N["name"]>}Provider`
+>;
 
-type GetConsumerName<N extends Names> = N["consumerName"] extends string
-  ? N["consumerName"]
-  : `${Capitalize<N["name"]>}Consumer`;
+type GetProviderProp<N extends Names> = GetName<N, "providerProp", N["name"]>;
 
-type GetHookName<N extends Names> = N["hookName"] extends string
-  ? N["hookName"]
-  : `use${Capitalize<N["name"]>}`;
+type GetConsumerName<N extends Names> = GetName<
+  N,
+  "consumerName",
+  `${Capitalize<N["name"]>}Consumer`
+>;
+
+type GetHookName<N extends Names> = GetName<
+  N,
+  "hookName",
+  `use${Capitalize<N["name"]>}`
+>;
 
 export type NamedRequiredContext<T, N extends Names> = Compute<
   Record<GetContextName<N>, Context<T | typeof UNSET_VALUE>> &
