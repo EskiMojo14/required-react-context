@@ -36,7 +36,8 @@
     "attw": "attw",
     "publint": "publint",
     "type": "tsc",
-    "prepack": "yarn run publint"
+    "prepack": "yarn run publint",
+    "size": "size-limit"
   },
   "repository": "https://github.com/EskiMojo14/required-react-context.git",
   "author": "EskiMojo14 <ben.j.durrant@gmail.com>",
@@ -62,6 +63,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.2",
+    "@size-limit/preset-small-lib": "^11.1.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.2",
     "@types/eslint": "^8",
@@ -81,6 +83,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^5.0.5",
+    "size-limit": "^11.1.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
