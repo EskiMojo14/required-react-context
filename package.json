@@ -29,6 +29,7 @@
     "prebuild": "yarn run type",
     "clean": "rimraf dist",
     "build": "yarn clean && tsup",
+    "build-only": "tsup",
     "test": "vitest",
     "lint": "eslint",
     "format": "prettier",
