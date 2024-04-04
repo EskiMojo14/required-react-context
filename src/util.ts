@@ -2,6 +2,7 @@
 export type Compute<T> = { [K in keyof T]: T[K] } & unknown;
 
 export function capitalise(str: string) {
+  if (typeof str !== "string") return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 

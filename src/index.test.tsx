@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import type { Context } from "react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
+import type { Names } from "./types";
 import { capitalise } from "./util";
 import { createRequiredContext } from ".";
 
@@ -180,7 +181,7 @@ describe("createRequiredContext", () => {
         hookName: "getTest",
       }),
     ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: createRequiredContext: hookName must start with "use". Received: getTest]`,
+      `[Error: createRequiredContext: hookName must start with "use". Got: getTest]`,
     );
   });
   it("can be used as a factory", () => {
@@ -194,5 +195,22 @@ describe("createRequiredContext", () => {
     // check that the context is not shared between the two
     expect(CountContext).toEqual(aContextWithDisplayName("CountContext"));
     expect(ACountContext).not.toBe(CountContext);
+  });
+  it.each(
+    Object.keys({
+      name: 0,
+      contextName: 0,
+      providerName: 0,
+      consumerName: 0,
+      hookName: 0,
+      providerProp: 0,
+    } satisfies Record<keyof Names, 0>) as Array<keyof Names>,
+  )("errors if %s is not a string", (option) => {
+    expect(() =>
+      createRequiredContext<number>().with({
+        name: "test",
+        [option]: 0,
+      }),
+    ).toThrowErrorMatchingSnapshot();
   });
 });

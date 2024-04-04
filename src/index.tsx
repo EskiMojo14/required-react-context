@@ -19,9 +19,21 @@ export function createRequiredContext<T>() {
       hookName = `use${capitalise(name)}`,
       providerProp = name,
     }: N): NamedRequiredContext<T, N> => {
+      for (const [name, value] of Object.entries({
+        contextName,
+        providerName,
+        consumerName,
+        hookName,
+        providerProp,
+      })) {
+        assert(
+          typeof value === "string",
+          `createRequiredContext: Expected ${name} to be a string. Got: ${typeof value}`,
+        );
+      }
       assert(
         hookName.startsWith("use"),
-        `hookName must start with "use". Got: ${hookName}`,
+        `createRequiredContext: hookName must start with "use". Got: ${hookName}`,
       );
       const Context = createContext<T | typeof UNSET_VALUE>(UNSET_VALUE);
       Context.displayName = contextName;
