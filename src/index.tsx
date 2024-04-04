@@ -2,7 +2,7 @@ import type { PropsWithChildren, ConsumerProps } from "react";
 import React, { createContext, useContext, useDebugValue } from "react";
 import type { Names, NamedRequiredContext } from "./types";
 import { UNSET_VALUE } from "./types";
-import { capitalise } from "./util";
+import { assert, capitalise } from "./util";
 
 export { UNSET_VALUE };
 
@@ -19,11 +19,22 @@ export function createRequiredContext<T>() {
       hookName = `use${capitalise(name)}`,
       providerProp = name,
     }: N): NamedRequiredContext<T, N> => {
-      if (!hookName.startsWith("use")) {
-        throw new Error(
-          `createRequiredContext: hookName must start with "use". Received: ${hookName}`,
+      for (const [name, value] of Object.entries({
+        contextName,
+        providerName,
+        consumerName,
+        hookName,
+        providerProp,
+      })) {
+        assert(
+          typeof value === "string",
+          `createRequiredContext: Expected ${name} to be a string. Got: ${typeof value}`,
         );
       }
+      assert(
+        hookName.startsWith("use"),
+        `createRequiredContext: hookName must start with "use". Got: ${hookName}`,
+      );
       const Context = createContext<T | typeof UNSET_VALUE>(UNSET_VALUE);
       Context.displayName = contextName;
       return {
@@ -40,9 +51,10 @@ export function createRequiredContext<T>() {
           return (
             <Context.Consumer>
               {(value) => {
-                if (value === UNSET_VALUE) {
-                  throw new Error(notSet(consumerName, providerName));
-                }
+                assert(
+                  value !== UNSET_VALUE,
+                  notSet(consumerName, providerName),
+                );
                 return props.children(value);
               }}
             </Context.Consumer>
@@ -50,9 +62,7 @@ export function createRequiredContext<T>() {
         },
         [hookName]() {
           const value = useContext(Context);
-          if (value === UNSET_VALUE) {
-            throw new Error(notSet(hookName, providerName));
-          }
+          assert(value !== UNSET_VALUE, notSet(hookName, providerName));
           useDebugValue(value);
           return value;
         },
