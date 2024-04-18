@@ -23,3 +23,9 @@ export function assert(
     throw new Error(typeof message === "string" ? message : message());
   }
 }
+
+export function wait(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}

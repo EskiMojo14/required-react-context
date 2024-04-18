@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { describe, expect, it } from "vitest";
 import { use } from "./canary";
 import { createRequiredContext } from ".";
+import { wait } from "./util";
 
 describe("canary support", () => {
   describe("use", () => {
@@ -80,8 +81,31 @@ describe("canary support", () => {
 
         expect.unreachable("Should throw");
       } catch (error) {
-        expect(error).toMatchInlineSnapshot(`[Error: use: context value is not set. Use TestProvider to set the value.]`);
+        expect(error).toMatchInlineSnapshot(
+          `[Error: use: context value is not set. Use TestProvider to set the value.]`,
+        );
       }
+    });
+
+    it("can be used normally with a promise", async () => {
+      async function doSomethingAsync() {
+        await wait(100);
+        return "Resolved";
+      }
+      function AsyncComponent() {
+        const text = use(doSomethingAsync());
+        return <div>{text}</div>;
+      }
+      render(
+        <Suspense fallback="Loading">
+          <AsyncComponent />
+        </Suspense>,
+      );
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.getByText("Resolved")).toBeInTheDocument();
+      });
     });
   });
 });
