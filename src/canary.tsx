@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 /// <reference types="react/canary" />
 import type { Context } from "react";
 import { use as originalUse } from "react";
