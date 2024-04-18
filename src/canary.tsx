@@ -1,5 +1,5 @@
 /// <reference types="react/canary" />
-import type { Usable } from "react";
+import type { Context, Usable } from "react";
 import { use as originalUse } from "react";
 import type { RequiredContext } from "./types";
 import { UNSET_VALUE } from "./types";
@@ -7,7 +7,7 @@ import type { OneOf } from "./util";
 import { notSet } from ".";
 
 function getProviderName(
-  usable: OneOf<RequiredContext<any> | Usable<any>>,
+  usable: OneOf<RequiredContext<any> | Context<any>>,
 ): string {
   return usable.providerName ?? `${usable.displayName ?? "Unknown"}.Provider`;
 }
@@ -17,7 +17,11 @@ export function use<T>(
 ): T {
   const value = originalUse(usable);
   if (value === UNSET_VALUE) {
-    throw new Error(notSet("use", getProviderName(usable)));
+    throw new Error(
+      "then" in usable
+        ? "thenable returned UNSET_VALUE"
+        : notSet("use", getProviderName(usable)),
+    );
   }
   return value;
 }
