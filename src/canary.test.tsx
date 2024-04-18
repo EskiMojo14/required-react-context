@@ -17,8 +17,10 @@ describe("canary support", () => {
     }
 
     it("throws when value is not set", () => {
-      expect(() => render(<TestComponent />)).toThrow(
-        "use: context value is not set. Use TestProvider to set the value.",
+      expect(() =>
+        render(<TestComponent />),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `[Error: use: context value is not set. Use TestProvider to set the value.]`,
       );
     });
 
@@ -78,10 +80,7 @@ describe("canary support", () => {
 
         expect.unreachable("Should throw");
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
-        expect((error as Error).message).toBe(
-          "use: context value is not set. Use TestProvider to set the value.",
-        );
+        expect(error).toMatchInlineSnapshot(`[Error: use: context value is not set. Use TestProvider to set the value.]`);
       }
     });
   });
