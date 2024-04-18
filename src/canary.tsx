@@ -7,9 +7,9 @@ import type { OneOf } from "./util";
 import { notSet } from ".";
 
 function getProviderName(
-  usable: OneOf<RequiredContext<any> | Context<any>>,
+  context: OneOf<RequiredContext<any> | Context<any>>,
 ): string {
-  return usable.providerName ?? `${usable.displayName ?? "Unknown"}.Provider`;
+  return context.providerName ?? `${context.displayName ?? "Unknown"}.Provider`;
 }
 
 export function use<T>(
