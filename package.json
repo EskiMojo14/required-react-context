@@ -12,6 +12,10 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./canary": {
+      "import": "./dist/canary.js",
+      "require": "./dist/canary.cjs"
     }
   },
   "files": [
@@ -49,7 +53,8 @@
   },
   "tsup": {
     "entry": [
-      "src/index.tsx"
+      "src/index.tsx",
+      "src/canary.tsx"
     ],
     "sourcemap": true,
     "format": [

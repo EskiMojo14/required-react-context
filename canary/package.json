@@ -1,0 +1,12 @@
+{
+  "name": "required-react-context-canary",
+  "version": "1.0.0",
+  "description": "A simple React Context wrapper that throws an error if it is used without being provided",
+  "type": "module",
+  "main": "../dist/canary.cjs",
+  "module": "../dist/canary.js",
+  "types": "../dist/canary.d.ts",
+  "files": [
+    "../dist"
+  ]
+}
