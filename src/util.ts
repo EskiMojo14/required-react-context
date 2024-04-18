@@ -14,6 +14,3 @@ export function assert(
     throw new Error(typeof message === "string" ? message : message());
   }
 }
-
-export const safeAssign: <T>(target: T, source: Partial<T>) => T =
-  Object.assign;
