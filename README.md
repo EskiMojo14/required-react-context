@@ -58,6 +58,28 @@ function App() {
 
 Note that `hookName` is required to start with `"use"`, to match the React hook naming convention.
 
+## React Canary - `use`
+
+Those who are using a canary version of React (either directly, or via a framework like Next.js) may be aware of the new [`use`](https://react.dev/reference/react/use) hook, which allows you to read a context conditionally.
+
+This library exports a wrapped version of this `use` hook from the `/canary` entry point, which will throw an error if the context is not set. This can be useful for cases where you want to conditionally read a context, but still require it to be set.
+
+```ts
+import { use } from "required-react-context/canary";
+
+const { CountContext, CountProvider } = createRequiredContext<number>().with({
+  name: "count",
+});
+
+function ConditionalCount({ show }: { show: boolean}) {
+  if (show) {
+    const count = use(CountContext); // will still throw if CountProvider is not set
+    return <div>{count}</div>;
+  }
+  return null;
+}
+```
+
 ## Typescript
 
 This package uses [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) from Typescript 5.0, so will not work properly with 4.9 or lower.
