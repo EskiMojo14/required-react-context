@@ -1,12 +1,12 @@
 import type { PropsWithChildren, ConsumerProps } from "react";
 import React, { createContext, useContext, useDebugValue } from "react";
-import type { Names, NamedRequiredContext } from "./types";
+import type { Names, NamedRequiredContext, RequiredContext } from "./types";
 import { UNSET_VALUE } from "./types";
 import { assert, capitalise } from "./util";
 
 export { UNSET_VALUE };
 
-const notSet = (caller: string, providerName: string) =>
+export const notSet = (caller: string, providerName: string) =>
   `${caller}: context value is not set. Use ${providerName} to set the value.`;
 
 export function createRequiredContext<T>() {
@@ -35,8 +35,13 @@ export function createRequiredContext<T>() {
         hookName.startsWith("use"),
         `createRequiredContext: hookName must start with "use". Got: ${hookName}`,
       );
-      const Context = createContext<T | typeof UNSET_VALUE>(UNSET_VALUE);
-      Context.displayName = contextName;
+      const Context: RequiredContext<T> = Object.assign(
+        createContext<T | typeof UNSET_VALUE>(UNSET_VALUE),
+        {
+          providerName,
+          displayName: contextName,
+        },
+      );
       return {
         [contextName]: Context,
         [providerName](props: PropsWithChildren<Record<string, T>>) {
