@@ -12,10 +12,15 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./canary": {
+      "import": "./dist/canary.js",
+      "require": "./dist/canary.cjs"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "canary"
   ],
   "keywords": [
     "react",
@@ -49,7 +54,8 @@
   },
   "tsup": {
     "entry": [
-      "src/index.tsx"
+      "src/index.tsx",
+      "src/canary.tsx"
     ],
     "sourcemap": true,
     "format": [
@@ -66,7 +72,8 @@
     "@arethetypeswrong/cli": "^0.15.2",
     "@size-limit/preset-small-lib": "^11.1.2",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.2",
+    "@testing-library/react": "^15",
+    "@testing-library/user-event": "^14.5.2",
     "@types/eslint": "^8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -81,12 +88,16 @@
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "publint": "^0.2.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18",
+    "react-dom": "^18",
     "rimraf": "^5.0.5",
     "size-limit": "^11.1.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
+  },
+  "resolutions": {
+    "react": "npm:canary",
+    "react-dom": "npm:canary"
   }
 }

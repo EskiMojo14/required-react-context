@@ -2,7 +2,7 @@
 
 A wrapper around React Context to require a value set with a Provider, throwing an error if used outside one. This avoids the often undesirable behavior of silently falling back to a default value.
 
-```ts
+```tsx
 import { createRequiredContext } from "required-react-context";
 
 export const { CountContext, useCount, CountProvider, CountConsumer } =
@@ -27,7 +27,7 @@ The context is required to be given a name, which will be used to name the conte
 
 Individual names can also be given to the hooks and components, which will be used in error messages (and devtools) instead of the defaults derived from the context name.
 
-```ts
+```tsx
 import { createRequiredContext } from "required-react-context";
 
 export const { ACountContext, useACount, ACountProvider, ACountConsumer } =
@@ -57,6 +57,28 @@ function App() {
 ```
 
 Note that `hookName` is required to start with `"use"`, to match the React hook naming convention.
+
+## React Canary - `use`
+
+Those who are using a canary version of React (either directly, or via a framework like Next.js) may be aware of the new [`use`](https://react.dev/reference/react/use) hook, which allows you to read a context conditionally.
+
+This library exports a wrapped version of this `use` hook from the `/canary` entry point, which will throw an error if the context is not set. This can be useful for cases where you want to conditionally read a context, but still require it to be set.
+
+```tsx
+import { use } from "required-react-context/canary";
+
+const { CountContext, CountProvider } = createRequiredContext<number>().with({
+  name: "count",
+});
+
+function ConditionalCount({ show }: { show: boolean }) {
+  if (show) {
+    const count = use(CountContext); // will still throw if CountProvider is not set
+    return <div>{count}</div>;
+  }
+  return null;
+}
+```
 
 ## Typescript
 
