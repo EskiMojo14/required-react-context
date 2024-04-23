@@ -23,6 +23,11 @@ export default [
     name: "import { createRequiredContext } from 'required-react-context'",
   },
   {
+    path: "dist/index.js",
+    import: "{ createOptionalContext }",
+    name: "import { createOptionalContext } from 'required-react-context'",
+  },
+  {
     path: "dist/canary.cjs",
     import: "{ use }",
     name: "import { use } from 'required-react-context/canary'",
