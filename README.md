@@ -58,6 +58,31 @@ function App() {
 
 Note that `hookName` is required to start with `"use"`, to match the React hook naming convention.
 
+## `createOptionalContext`
+
+While the main focus of this library is on contexts that require a Provider in the tree, we also recognise that there are valid use cases for a default value to be provided. We think that the naming behaviour of `createRequiredContext` is useful in general, so we provide a similar API for optional contexts.
+
+```tsx
+import { createOptionalContext } from "required-react-context";
+
+const { CountContext, useCount, CountProvider, CountConsumer } =
+  createOptionalContext<number>(0).with({ name: "count" }); // default value provided
+
+function Child() {
+  // This will not throw an error if used outside a CountProvider
+  const count = useCount();
+  return <div>{count.value}</div>;
+}
+
+function App() {
+  return (
+    <CountProvider count={5}>
+      <Child />
+    </CountProvider>
+  );
+}
+```
+
 ## React Canary - `use`
 
 Those who are using a canary version of React (either directly, or via a framework like Next.js) may be aware of the new [`use`](https://react.dev/reference/react/use) hook, which allows you to read a context conditionally.
