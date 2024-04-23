@@ -3,7 +3,7 @@ import type { Context, Usable } from "react";
 import { use as originalUse } from "react";
 import type { NamedContext } from "./types";
 import { UNSET_VALUE } from "./types";
-import type { OneOf } from "./util";
+import { assert, type OneOf } from "./util";
 import { notSet } from ".";
 
 function getProviderName(
@@ -16,12 +16,11 @@ export function use<T>(
   usable: NamedContext<T | typeof UNSET_VALUE> | Usable<T | typeof UNSET_VALUE>,
 ): T {
   const value = originalUse(usable);
-  if (value === UNSET_VALUE) {
-    throw new Error(
-      "then" in usable
-        ? "thenable returned UNSET_VALUE"
-        : notSet("use", getProviderName(usable)),
-    );
-  }
+  assert(
+    value !== UNSET_VALUE,
+    "then" in usable
+      ? "thenable returned UNSET_VALUE"
+      : notSet("use", getProviderName(usable)),
+  );
   return value;
 }
