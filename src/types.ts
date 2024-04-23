@@ -44,13 +44,20 @@ type GetHookName<N extends Names> = GetName<
   `use${Capitalize<N["name"]>}`
 >;
 
-export interface RequiredContext<T> extends Context<T | typeof UNSET_VALUE> {
+export interface NamedContext<T> extends Context<T> {
   displayName: string;
   providerName: string;
 }
 
-export type NamedRequiredContext<T, N extends Names> = Compute<
-  Record<GetContextName<N>, RequiredContext<T>> &
+export type NamedContextUtils<
+  T,
+  N extends Names,
+  IsRequired extends boolean = true,
+> = Compute<
+  Record<
+    GetContextName<N>,
+    IsRequired extends true ? T | typeof UNSET_VALUE : T
+  > &
     Record<
       GetProviderName<N>,
       FC<PropsWithChildren<Record<GetProviderProp<N>, T>>>
