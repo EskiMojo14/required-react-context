@@ -132,9 +132,9 @@ export function createOptionalContext<T>(defaultValue: T): {
             </Context.Provider>
           );
         },
-        [consumerName]: Object.assign(Context.Consumer, {
-          displayName: consumerName,
-        }),
+        [consumerName](props: ConsumerProps<T>) {
+          return <Context.Consumer {...props} />;
+        },
         [hookName]() {
           const value = useContext(Context);
           useDebugValue(value);

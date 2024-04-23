@@ -5,15 +5,16 @@ import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import type { Names } from "./types";
 import { capitalise } from "./util";
-import { createRequiredContext } from ".";
+import { createOptionalContext, createRequiredContext } from ".";
+
+const aContextWithDisplayName = (displayName: string) =>
+  expect.objectContaining<Context<number>>({
+    Provider: expect.anything(),
+    Consumer: expect.anything(),
+    displayName,
+  });
 
 describe("createRequiredContext", () => {
-  const aContextWithDisplayName = (displayName: string) =>
-    expect.objectContaining<Context<number>>({
-      Provider: expect.anything(),
-      Consumer: expect.anything(),
-      displayName,
-    });
   it("creates a context and related utils", () => {
     const { TestContext, TestProvider, TestConsumer, useTest } =
       createRequiredContext<number>().with({ name: "test" });
@@ -208,6 +209,171 @@ describe("createRequiredContext", () => {
   )("errors if %s is not a string", (option) => {
     expect(() =>
       createRequiredContext<number>().with({
+        name: "test",
+        [option]: 0,
+      }),
+    ).toThrowErrorMatchingSnapshot();
+  });
+});
+
+describe("createOptionalContext", () => {
+  it("creates a context and related utils", () => {
+    const { TestContext, TestProvider, TestConsumer, useTest } =
+      createOptionalContext(0).with({ name: "test" });
+
+    expect(TestContext).toEqual(aContextWithDisplayName("TestContext"));
+
+    expect(TestProvider).toBeTypeOf("function");
+
+    expect(TestProvider.name).toBe("TestProvider");
+
+    expect(TestConsumer).toBeTypeOf("function");
+
+    expect(TestConsumer.name).toBe("TestConsumer");
+
+    expect(useTest).toBeTypeOf("function");
+
+    expect(useTest.name).toBe("useTest");
+
+    const consume = vi.fn();
+
+    expect(() =>
+      render(
+        <TestProvider test={1}>
+          <TestConsumer>{consume}</TestConsumer>
+        </TestProvider>,
+      ),
+    ).not.toThrow();
+  });
+  it("allows customising names", () => {
+    const { CoolContext, CoolProvider, CoolConsumer, useCool } =
+      createOptionalContext(0).with({
+        name: "test",
+        contextName: "CoolContext",
+        providerName: "CoolProvider",
+        providerProp: "coolValue",
+        consumerName: "CoolConsumer",
+        hookName: "useCool",
+      });
+
+    expect(CoolContext).toEqual(aContextWithDisplayName("CoolContext"));
+
+    expect(CoolProvider).toBeTypeOf("function");
+
+    expect(CoolProvider.name).toBe("CoolProvider");
+
+    expect(CoolConsumer).toBeTypeOf("function");
+
+    expect(CoolConsumer.name).toBe("CoolConsumer");
+
+    expect(useCool).toBeTypeOf("function");
+
+    expect(useCool.name).toBe("useCool");
+
+    const consume = vi.fn();
+    expect(() =>
+      render(
+        <CoolProvider coolValue={1}>
+          <CoolConsumer>{consume}</CoolConsumer>
+        </CoolProvider>,
+      ),
+    ).not.toThrow();
+
+    expect(consume).toHaveBeenCalledWith(1);
+  });
+  it("uses context value if provider is above tree", () => {
+    const { TestConsumer, useTest, TestProvider } = createOptionalContext(
+      0,
+    ).with({
+      name: "test",
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const consume = vi.fn((_value: number) => "Find me");
+
+    render(
+      <TestProvider test={1}>
+        <TestConsumer>{consume}</TestConsumer>
+      </TestProvider>,
+    );
+
+    expect(consume).toHaveBeenCalledWith(1);
+
+    consume.mockClear();
+
+    function TestComponent() {
+      const value = useTest();
+      consume(value);
+      return <div>{value}</div>;
+    }
+
+    render(
+      <TestProvider test={1}>
+        <TestComponent />
+      </TestProvider>,
+    );
+
+    expect(consume).toHaveBeenCalledWith(1);
+  });
+  it("uses default value when no provider is above tree", () => {
+    const { TestConsumer, useTest } = createOptionalContext(0).with({
+      name: "test",
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const consume = vi.fn((_value: number) => "Find me");
+
+    render(<TestConsumer>{consume}</TestConsumer>);
+
+    expect(consume).toHaveBeenCalledWith(0);
+
+    consume.mockClear();
+
+    function TestComponent() {
+      const value = useTest();
+      consume(value);
+      return <div>{value}</div>;
+    }
+
+    render(<TestComponent />);
+
+    expect(consume).toHaveBeenCalledWith(0);
+  });
+  it("errors if hookName starts with something other than use", () => {
+    expect(() =>
+      createOptionalContext(0).with({
+        name: "test",
+        // @ts-expect-error Testing invalid input
+        hookName: "getTest",
+      }),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: createOptionalContext: hookName must start with "use". Got: getTest]`,
+    );
+  });
+  it("can be used as a factory", () => {
+    const createNumberContext = createOptionalContext(0);
+    const { CountContext } = createNumberContext.with({ name: "count" });
+    expect(CountContext).toEqual(aContextWithDisplayName("CountContext"));
+
+    const { ACountContext } = createNumberContext.with({ name: "aCount" });
+    expect(ACountContext).toEqual(aContextWithDisplayName("ACountContext"));
+
+    // check that the context is not shared between the two
+    expect(CountContext).toEqual(aContextWithDisplayName("CountContext"));
+    expect(ACountContext).not.toBe(CountContext);
+  });
+  it.each(
+    Object.keys({
+      name: 0,
+      contextName: 0,
+      providerName: 0,
+      consumerName: 0,
+      hookName: 0,
+      providerProp: 0,
+    } satisfies Record<keyof Names, 0>) as Array<keyof Names>,
+  )("errors if %s is not a string", (option) => {
+    expect(() =>
+      createOptionalContext(0).with({
         name: "test",
         [option]: 0,
       }),
