@@ -1,12 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`createOptionalContext > errors if consumerName is not a string 1`] = `[Error: createOptionalContext: Expected consumerName to be a string. Got: number]`;
+
+exports[`createOptionalContext > errors if contextName is not a string 1`] = `[Error: createOptionalContext: Expected contextName to be a string. Got: number]`;
+
+exports[`createOptionalContext > errors if hookName is not a string 1`] = `[Error: createOptionalContext: Expected hookName to be a string. Got: number]`;
+
+exports[`createOptionalContext > errors if name is not a string 1`] = `[Error: createOptionalContext: Expected name to be a string. Got: number]`;
+
+exports[`createOptionalContext > errors if providerName is not a string 1`] = `[Error: createOptionalContext: Expected providerName to be a string. Got: number]`;
+
+exports[`createOptionalContext > errors if providerProp is not a string 1`] = `[Error: createOptionalContext: Expected providerProp to be a string. Got: number]`;
+
 exports[`createRequiredContext > errors if consumerName is not a string 1`] = `[Error: createRequiredContext: Expected consumerName to be a string. Got: number]`;
 
 exports[`createRequiredContext > errors if contextName is not a string 1`] = `[Error: createRequiredContext: Expected contextName to be a string. Got: number]`;
 
 exports[`createRequiredContext > errors if hookName is not a string 1`] = `[Error: createRequiredContext: Expected hookName to be a string. Got: number]`;
 
-exports[`createRequiredContext > errors if name is not a string 1`] = `[Error: createRequiredContext: Expected providerProp to be a string. Got: number]`;
+exports[`createRequiredContext > errors if name is not a string 1`] = `[Error: createRequiredContext: Expected name to be a string. Got: number]`;
 
 exports[`createRequiredContext > errors if providerName is not a string 1`] = `[Error: createRequiredContext: Expected providerName to be a string. Got: number]`;
 
