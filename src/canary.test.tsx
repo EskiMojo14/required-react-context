@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import React, { Suspense, useState } from "react";
 import { describe, expect, it } from "vitest";
 import { use } from "./canary";
-import { createRequiredContext } from ".";
 import { wait } from "./util";
+import { createRequiredContext } from ".";
 
 describe("canary support", () => {
   describe("use", () => {
