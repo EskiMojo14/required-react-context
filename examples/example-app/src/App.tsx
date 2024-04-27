@@ -3,15 +3,29 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { createRequiredContext } from "required-react-context";
+import { use } from "required-react-context/canary";
 import { ErrorBoundary } from "react-error-boundary";
 
-const { CountProvider, useCount } = createRequiredContext<number>().with({
-  name: "count",
-});
+const { CountProvider, useCount, CountContext } =
+  createRequiredContext<number>().with({
+    name: "count",
+  });
 
 function CurrentCount() {
   const count = useCount();
   return <p>count is {count}</p>;
+}
+
+function ConditionalRead({ inside }: { inside?: boolean }) {
+  const [shouldRead, setShouldRead] = useState(false);
+  if (shouldRead) {
+    return <p> count is {use(CountContext)}</p>;
+  }
+  return (
+    <button onClick={() => setShouldRead(true)}>
+      Read count {inside ? "inside" : "outside"} provider
+    </button>
+  );
 }
 
 function ErrorFallback({
@@ -55,13 +69,17 @@ function App() {
         <CountProvider count={count}>
           <CurrentCount />
         </CountProvider>
-        {showBroken && <CurrentCount />}
         <button onClick={() => setCount((count) => count + 1)}>
           Increment
         </button>
+        {showBroken && <CurrentCount />}
         <button onClick={() => setShowBroken(true)}>
           Show component outside of provider
         </button>
+        <CountProvider count={count}>
+          <ConditionalRead inside />
+        </CountProvider>
+        <ConditionalRead />
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
