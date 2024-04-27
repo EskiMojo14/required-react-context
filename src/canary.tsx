@@ -13,17 +13,14 @@ function getProviderName(
 }
 
 export function use<T>(
-  usable:
-    | NamedContext<T | typeof UNSET_VALUE>
-    | Usable<T | typeof UNSET_VALUE>
-    | Usable<T>,
-): T {
-  const value = originalUse(usable as Usable<T | typeof UNSET_VALUE>);
+  usable: NamedContext<T> | Usable<T>,
+): Exclude<T, typeof UNSET_VALUE> {
+  const value = originalUse(usable);
   assert(
     value !== UNSET_VALUE,
     "then" in usable
       ? "thenable returned UNSET_VALUE"
       : notSet("use", getProviderName(usable)),
   );
-  return value;
+  return value as never;
 }
