@@ -27,6 +27,9 @@ function ErrorFallback({
       <pre style={{ whiteSpace: "normal", color: "red" }}>
         {error instanceof Error ? error.message : String(error)}
       </pre>
+      {error instanceof Error && error.stack && (
+        <pre style={{ whiteSpace: "normal" }}>{error.stack}</pre>
+      )}
       <button onClick={resetErrorBoundary}>Reset</button>
     </div>
   );
