@@ -19,7 +19,12 @@ function CurrentCount() {
 function ConditionalRead({ inside }: { inside?: boolean }) {
   const [shouldRead, setShouldRead] = useState(false);
   if (shouldRead) {
-    return <p> count is {use(CountContext)}</p>;
+    return (
+      <>
+        <p> count is {use(CountContext)}</p>
+        <button onClick={() => setShouldRead(false)}>Stop reading count</button>
+      </>
+    );
   }
   return (
     <button onClick={() => setShouldRead(true)}>
