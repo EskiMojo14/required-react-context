@@ -24,12 +24,10 @@ function ErrorFallback({
   return (
     <div role="alert">
       <p>Something went wrong:</p>
-      <pre style={{ whiteSpace: "normal", color: "red" }}>
+      <pre style={{ color: "red" }}>
         {error instanceof Error ? error.message : String(error)}
       </pre>
-      {error instanceof Error && error.stack && (
-        <pre style={{ whiteSpace: "normal" }}>{error.stack}</pre>
-      )}
+      {error instanceof Error && error.stack && <pre>{error.stack}</pre>}
       <button onClick={resetErrorBoundary}>Reset</button>
     </div>
   );
