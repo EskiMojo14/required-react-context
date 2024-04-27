@@ -56,7 +56,7 @@ export type NamedContextUtils<
 > = Compute<
   Record<
     GetContextName<N>,
-    IsRequired extends true ? T | typeof UNSET_VALUE : T
+    Context<IsRequired extends true ? T | typeof UNSET_VALUE : T>
   > &
     Record<
       GetProviderName<N>,
