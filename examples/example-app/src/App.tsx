@@ -1,6 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import { createRequiredContext } from "required-react-context";
 import { use } from "required-react-context/canary";
@@ -61,15 +59,6 @@ function App() {
       FallbackComponent={ErrorFallback}
       onReset={() => setShowBroken(false)}
     >
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
       <div className="card">
         <CountProvider count={count}>
           <CurrentCount />
@@ -85,13 +74,7 @@ function App() {
           <ConditionalRead inside />
         </CountProvider>
         <ConditionalRead />
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </ErrorBoundary>
   );
 }
