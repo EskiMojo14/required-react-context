@@ -77,7 +77,7 @@ export function createRequiredContext<T>(): {
         [contextName]: Context,
         [providerName](props: PropsWithChildren<Record<string, T>>) {
           return (
-            <Context.Provider value={props[providerProp] as never}>
+            <Context.Provider value={props[providerProp] as T}>
               {props.children}
             </Context.Provider>
           );
@@ -129,7 +129,7 @@ export function createOptionalContext<T>(defaultValue: T): {
         [contextName]: Context,
         [providerName](props: PropsWithChildren<Record<string, T>>) {
           return (
-            <Context.Provider value={props[providerProp] as never}>
+            <Context.Provider value={props[providerProp] as T}>
               {props.children}
             </Context.Provider>
           );
