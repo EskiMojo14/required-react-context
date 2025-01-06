@@ -8,7 +8,7 @@ import { capitalise } from "./util";
 import { createOptionalContext, createRequiredContext } from ".";
 
 const aContextWithDisplayName = (displayName: string) =>
-  expect.objectContaining<Context<number>>({
+  expect.objectContaining<Partial<Context<number>>>({
     Provider: expect.anything(),
     Consumer: expect.anything(),
     displayName,
