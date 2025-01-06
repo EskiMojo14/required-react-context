@@ -49,15 +49,8 @@ export interface NamedContext<T> extends Context<T> {
   providerName: string;
 }
 
-export type NamedContextUtils<
-  T,
-  N extends Names,
-  IsRequired extends boolean = true,
-> = Compute<
-  Record<
-    GetContextName<N>,
-    Context<IsRequired extends true ? T | typeof UNSET_VALUE : T>
-  > &
+export type NamedContextUtils<T, N extends Names, DefaultValue> = Compute<
+  Record<GetContextName<N>, Context<T | DefaultValue>> &
     Record<
       GetProviderName<N>,
       FC<PropsWithChildren<Record<GetProviderProp<N>, T>>>

@@ -53,7 +53,9 @@ const applyDefaultNames = ({
 });
 
 export function createRequiredContext<T>(): {
-  with: <const N extends Names>(names: N) => NamedContextUtils<T, N>;
+  with: <const N extends Names>(
+    names: N,
+  ) => NamedContextUtils<T, N, typeof UNSET_VALUE>;
 } {
   return {
     with(names) {
@@ -105,7 +107,7 @@ export function createRequiredContext<T>(): {
 }
 
 export function createOptionalContext<T>(defaultValue: T): {
-  with: <const N extends Names>(names: N) => NamedContextUtils<T, N, false>;
+  with: <const N extends Names>(names: N) => NamedContextUtils<T, N, T>;
 } {
   return {
     with(names) {
