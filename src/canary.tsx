@@ -12,6 +12,8 @@ function getProviderName(
   return context.providerName ?? `${context.displayName ?? "Unknown"}.Provider`;
 }
 
+// false positive
+// eslint-disable-next-line @eslint-react/hooks-extra/no-useless-custom-hooks
 export function use<T>(
   usable: NamedContext<T> | Usable<T>,
 ): Exclude<T, typeof UNSET_VALUE> {

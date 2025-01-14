@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, { Suspense, useState } from "react";
+import { Suspense, useState } from "react";
 import { describe, expect, it } from "vitest";
 import { use } from "./canary";
 import { wait } from "./util";
@@ -44,6 +44,7 @@ describe("canary support", () => {
       const text = clicked ? use(TestContext) : "Click me";
       return (
         <button
+          type="button"
           onClick={() => {
             setClicked(true);
           }}

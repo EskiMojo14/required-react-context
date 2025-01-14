@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ConsumerProps } from "react";
-import React, { createContext, useContext, useDebugValue } from "react";
+import { createContext, useContext, useDebugValue } from "react";
 import type { Names, NamedContext, NamedContextUtils } from "./types";
 import { UNSET_VALUE } from "./types";
 import { assert, capitalise } from "./util";
@@ -75,6 +75,8 @@ export function createRequiredContext<T>(): {
       });
       return {
         [contextName]: Context,
+        // false positive
+        // eslint-disable-next-line @eslint-react/no-unstable-context-value
         [providerName](props: PropsWithChildren<Record<string, T>>) {
           return (
             <Context.Provider value={props[providerProp] as T}>
@@ -127,6 +129,8 @@ export function createOptionalContext<T>(defaultValue: T): {
       });
       return {
         [contextName]: Context,
+        // false positive
+        // eslint-disable-next-line @eslint-react/no-unstable-context-value
         [providerName](props: PropsWithChildren<Record<string, T>>) {
           return (
             <Context.Provider value={props[providerProp] as T}>

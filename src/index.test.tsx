@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import { render, screen } from "@testing-library/react";
 import type { Context } from "react";
-import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import type { Names } from "./types";
 import { capitalise } from "./util";
@@ -145,6 +144,7 @@ describe("createRequiredContext", () => {
     const typedCapitalise = capitalise as <T extends string>(
       str: T,
     ) => Capitalize<T>;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
     const createAContext = <T,>() => ({
       withName: <Name extends string>(name: Name) =>
         createRequiredContext<T>().with({

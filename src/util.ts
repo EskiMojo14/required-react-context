@@ -7,7 +7,7 @@ export type OneOf<
   U,
   K extends KeyofUnion<U> = KeyofUnion<U>,
 > = U extends infer T
-  ? Compute<T & { [P in Exclude<K, keyof T>]?: undefined }>
+  ? Compute<T & Partial<Record<Exclude<K, keyof T>, undefined>>>
   : never;
 
 export function capitalise(str: string) {

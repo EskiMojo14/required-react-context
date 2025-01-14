@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "./App.css";
+import { ErrorBoundary } from "react-error-boundary";
 import { createRequiredContext } from "required-react-context";
 import { use } from "required-react-context/canary";
-import { ErrorBoundary } from "react-error-boundary";
+import "./App.css";
 
 const { CountProvider, useCount, CountContext } =
   createRequiredContext<number>().with({
@@ -20,12 +20,24 @@ function ConditionalRead({ inside }: { inside?: boolean }) {
     return (
       <>
         <p> count is {use(CountContext)}</p>
-        <button onClick={() => setShouldRead(false)}>Stop reading count</button>
+        <button
+          type="button"
+          onClick={() => {
+            setShouldRead(false);
+          }}
+        >
+          Stop reading count
+        </button>
       </>
     );
   }
   return (
-    <button onClick={() => setShouldRead(true)}>
+    <button
+      type="button"
+      onClick={() => {
+        setShouldRead(true);
+      }}
+    >
       Read count {inside ? "inside" : "outside"} provider
     </button>
   );
@@ -45,7 +57,9 @@ function ErrorFallback({
         {error instanceof Error ? error.message : String(error)}
       </pre>
       {error instanceof Error && error.stack && <pre>{error.stack}</pre>}
-      <button onClick={resetErrorBoundary}>Reset</button>
+      <button type="button" onClick={resetErrorBoundary}>
+        Reset
+      </button>
     </div>
   );
 }
@@ -57,17 +71,29 @@ function App() {
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
-      onReset={() => setShowBroken(false)}
+      onReset={() => {
+        setShowBroken(false);
+      }}
     >
       <div className="card">
         <CountProvider count={count}>
           <CurrentCount />
         </CountProvider>
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button
+          type="button"
+          onClick={() => {
+            setCount((count) => count + 1);
+          }}
+        >
           Increment
         </button>
         {showBroken && <CurrentCount />}
-        <button onClick={() => setShowBroken(true)}>
+        <button
+          type="button"
+          onClick={() => {
+            setShowBroken(true);
+          }}
+        >
           Show component outside of provider
         </button>
         <CountProvider count={count}>
