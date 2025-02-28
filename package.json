@@ -1,7 +1,7 @@
 {
   "name": "required-react-context",
   "description": "A simple React Context wrapper that throws an error if it is used without being provided",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "pnpm@10.5.2+sha256.79a98daa90248b50815e31460790f118c56fe099113370826caa0153be6daba5",
   "version": "1.4.1",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -33,10 +33,10 @@
     "usecontext"
   ],
   "scripts": {
-    "prepare": "husky install",
-    "prebuild": "yarn run type",
+    "prepare": "husky",
+    "prebuild": "pnpm run type",
     "clean": "rimraf dist",
-    "build": "yarn clean && yarn build-only",
+    "build": "pnpm clean && pnpm build-only",
     "build-only": "tsup",
     "test": "vitest",
     "lint": "eslint",
@@ -45,9 +45,9 @@
     "attw": "attw",
     "publint": "publint",
     "type": "tsc",
-    "prepack": "yarn run publint",
+    "prepack": "pnpm run publint",
     "size": "size-limit",
-    "example": "yarn workspace example-app dev"
+    "example": "pnpm workspace example-app dev"
   },
   "repository": "https://github.com/EskiMojo14/required-react-context.git",
   "author": "EskiMojo14 <ben.j.durrant@gmail.com>",
